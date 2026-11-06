@@ -3,18 +3,18 @@ import Sidebar from "../components/layout/Sidebar";
 
 export default function DashboardLayout() {
   return (
-    <div className="min-h-screen bg-zinc-100 md:flex">
-      <Sidebar />
+    <div className="flex h-screen overflow-hidden bg-zinc-100">
+      {/* Sidebar fijo */}
+      <aside className="w-64 shrink-0 h-full bg-zinc-900">
+        <Sidebar />
+      </aside>
 
-      <div className="min-w-0 flex-1">
-        <header className="bg-white border-b border-zinc-200 px-6 md:px-10 py-5">
-          <p className="text-sm text-zinc-500">Vinyl Store / Administración</p>
-        </header>
-
-        <main className="p-6 md:p-10">
+      {/* Contenido principal con scroll independiente */}
+      <main className="flex-1 min-w-0 h-full overflow-y-auto">
+        <div className="p-6 md:p-10">
           <Outlet />
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }
