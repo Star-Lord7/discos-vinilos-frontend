@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   return (
     <footer className="bg-zinc-900 text-white py-16 mt-24">
@@ -28,6 +30,19 @@ export default function Footer() {
           <h3 className="font-semibold mb-3">Contact</h3>
 
           <p className="text-zinc-400">info@vinylstore.com</p>
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p className="text-sm text-zinc-500">
+              © {new Date().getFullYear()} Vinyl Store. Todos los derechos
+              reservados.
+            </p>
+
+            <Link
+              to="/login"
+              className="text-sm text-zinc-500 hover:text-orange-600 transition-colors"
+            >
+              Acceso administrativo
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import type { Product } from "../../interface/product.interface";
 import { getProductById } from "../../services/product";
+import { getProductImageUrl } from "../../utils/productImage";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -31,16 +32,29 @@ export default function ProductDetail() {
     );
   }
 
+  const primaryImage =
+    product.images?.find((image) => image.isPrimary) ?? product.images?.[0];
+
+  const imageUrl = getProductImageUrl(primaryImage?.url);
+
   return (
     <>
       <div className="min-h-screen bg-stone-100">
         <div className="max-w-7xl mx-auto py-20 px-6">
           <div className="grid lg:grid-cols-2 gap-16">
-            <img
-              src="https://placehold.co/700x700"
-              alt={product.name}
-              className="rounded-xl shadow-lg"
-            />
+            <div className="aspect-square w-full overflow-hidden rounded-xl bg-zinc-200 shadow-lg">
+              {imageUrl ? (
+                <img
+                  src={imageUrl}
+                  alt={`Portada de ${product.album}`}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-zinc-500">
+                  Sin imagen disponible
+                </div>
+              )}
+            </div>
 
             <div>
               <h1 className="text-5xl font-serif">{product.name}</h1>

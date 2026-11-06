@@ -15,3 +15,8 @@ export const getProductsByCategory = async (
 
   return data;
 };
+
+export const getGenresByCategory = async (categoryId: string) => {
+  const { data } = await api.get(`/categories/${categoryId}/genres`);
+  return data;
+};

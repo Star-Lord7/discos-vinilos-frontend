@@ -1,15 +1,27 @@
 import { Link } from "react-router-dom";
 import type { Product } from "../../interface/product.interface";
+import { getProductImageUrl } from "../../utils/productImage";
 
 export default function ProductCard({ products }: { products: Product }) {
+  const primaryImage =
+    products.images?.find((image) => image.isPrimary) ?? products.images?.[0];
+
+  const imageUrl = getProductImageUrl(primaryImage?.url);
   return (
     <article className="bg-white rounded-2xl overflow-hidden shadow hover:shadow-xl duration-300 group">
-      <div className="overflow-hidden">
-        <img
-          src="https://images.unsplash.com/photo-1483412033650-1015ddeb83d1"
-          alt=""
-          className="h-80 w-full object-cover group-hover:scale-110 duration-500"
-        />
+      <div className="aspect-square w-full overflow-hidden bg-zinc-100">
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={`Portada de ${products.album}`}
+            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+            loading="lazy"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-zinc-400">
+            Sin imagen disponible
+          </div>
+        )}
       </div>
 
       <div className="p-6">
