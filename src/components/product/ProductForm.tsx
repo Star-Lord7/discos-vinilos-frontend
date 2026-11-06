@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { createProduct, type CreateProductDto } from "../../services/product";
-import { getArtists } from "../../services/artist";
 import { getCategories, getGenresByCategory } from "../../services/category";
+import { getArtists } from "../../services/artist";
+import FormSelect from "../ui/FormSelect";
 
 interface Option {
   id: string;
@@ -242,21 +243,19 @@ export default function ProductForm({ onSuccess, onCancel }: ProductFormProps) {
           <label htmlFor="artistId" className={labelClass}>
             Artista
           </label>
-          <select
-            id="artistId"
+
+          <FormSelect
             name="artistId"
             value={form.artistId}
-            onChange={handleChange}
-            className={inputClass}
-            required
-          >
-            <option value="">Selecciona un artista</option>
-            {artists.map((artist) => (
-              <option key={artist.id} value={artist.id}>
-                {artist.name}
-              </option>
-            ))}
-          </select>
+            options={artists}
+            placeholder="Selecciona un artista"
+            onChange={(value) =>
+              setForm((previous) => ({
+                ...previous,
+                artistId: value,
+              }))
+            }
+          />
         </div>
 
         <div>
@@ -264,22 +263,21 @@ export default function ProductForm({ onSuccess, onCancel }: ProductFormProps) {
             Categoría
           </label>
 
-          <select
-            id="categoryId"
+          <FormSelect
             name="categoryId"
             value={form.categoryId}
-            onChange={handleChange}
-            className={inputClass}
-            required
-          >
-            <option value="">Selecciona una categoría</option>
+            options={categories}
+            placeholder="Selecciona una categoría"
+            onChange={(value) => {
+              setGenres([]);
 
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
+              setForm((previous) => ({
+                ...previous,
+                categoryId: value,
+                genreId: "",
+              }));
+            }}
+          />
         </div>
 
         <div>
@@ -287,44 +285,46 @@ export default function ProductForm({ onSuccess, onCancel }: ProductFormProps) {
             Género musical
           </label>
 
-          <select
-            id="genreId"
+          <FormSelect
             name="genreId"
             value={form.genreId}
-            onChange={handleChange}
-            className={inputClass}
-            disabled={!form.categoryId}
-            required
-          >
-            <option value="">
-              {form.categoryId
+            options={genres}
+            placeholder={
+              form.categoryId
                 ? "Selecciona un género"
-                : "Primero selecciona una categoría"}
-            </option>
-
-            {genres.map((genre) => (
-              <option key={genre.id} value={genre.id}>
-                {genre.name}
-              </option>
-            ))}
-          </select>
+                : "Primero selecciona una categoría"
+            }
+            disabled={!form.categoryId}
+            onChange={(value) =>
+              setForm((previous) => ({
+                ...previous,
+                genreId: value,
+              }))
+            }
+          />
         </div>
 
         <div>
           <label htmlFor="format" className={labelClass}>
             Formato
           </label>
-          <select
-            id="format"
+
+          <FormSelect
             name="format"
             value={form.format}
-            onChange={handleChange}
-            className={inputClass}
-            required
-          >
-            <option value="VINYL">Vinilo</option>
-            <option value="CD">CD</option>
-          </select>
+            options={[
+              { id: "VINYL", name: "Vinilo" },
+              { id: "CD", name: "CD" },
+            ]}
+            placeholder="Selecciona un formato"
+            searchable={false}
+            onChange={(value) =>
+              setForm((previous) => ({
+                ...previous,
+                format: value as CreateProductDto["format"],
+              }))
+            }
+          />
         </div>
 
         <div>
